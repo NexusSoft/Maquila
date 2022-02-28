@@ -491,6 +491,31 @@ namespace Maquila
                 dtgValMaquila.SetRowCellValue(rowHandle, dtgValMaquila.Columns["cSubTotal"], cSubTotal);
                 dtgValMaquila.SetRowCellValue(rowHandle, dtgValMaquila.Columns["cCharola"], cCharola);
                 dtgValMaquila.SetRowCellValue(rowHandle, dtgValMaquila.Columns["cTOTAL"], cTOTAL);
+
+                CLS_Maquila ins2 = new CLS_Maquila();
+                ins2.d_fecha_inicio_maq= dtFechaInicio.DateTime.Year.ToString() + DosCeros(dtFechaInicio.DateTime.Month.ToString()) + DosCeros(dtFechaInicio.DateTime.Day.ToString());
+                ins2.d_fecha_fin_maq = dtFechaFin.DateTime.Year.ToString() + DosCeros(dtFechaFin.DateTime.Month.ToString()) + DosCeros(dtFechaFin.DateTime.Day.ToString());
+                ins2.n_semana_maq = Convert.ToInt32(txtSemana.EditValue);
+                ins2.Semana = Convert.ToInt32(txtSemana.EditValue);
+                ins2.cManifiesto = cManifiesto;
+                ins2.cDistribuidor = cDistribuidor;
+                DateTime fecha = Convert.ToDateTime(cFechaEmbarque);
+                ins2.cFechaEmbarque = fecha.Year.ToString() + DosCeros(fecha.Month.ToString()) + DosCeros(fecha.Day.ToString());
+                ins2.cProducto = cProducto;
+                ins2.cEnvase = cEnvase;
+                ins2.cPesoEstandar = cPesoEstandar;
+                ins2.cCajas = cCajas;
+                ins2.cMontoMaquila = cMontoMaquila;
+                ins2.cMallas = cMallas;
+                ins2.cAPEAM = cAPEAM;
+                ins2.cSubTotal = cSubTotal;
+                ins2.cCharola = cCharola;
+                ins2.cTOTAL = cTOTAL;
+                ins2.MtdGuardarMaquilaDetalles();
+                if(!ins2.Exito)
+                {
+                    XtraMessageBox.Show(ins2.Mensaje);
+                }
             }
             CLS_Maquila ins = new CLS_Maquila();
             ins.cManifiesto = cManifiesto;
@@ -890,7 +915,7 @@ namespace Maquila
                 sel.FechaFin = dtFechaFin.DateTime.Year.ToString() + DosCeros(dtFechaFin.DateTime.Month.ToString()) + DosCeros(dtFechaFin.DateTime.Day.ToString());
                 sel.MtdSeleccionarMaquila();
                 vNTermo = 1;
-                if (sel.Exito)
+                if (sel.Exito && sel.Datos.Rows.Count>0)
                 {
                     vManifiesto = sel.Datos.Rows[0]["c_codigo_man"].ToString();
                     TomarPrecio(vNTermo);
@@ -898,52 +923,65 @@ namespace Maquila
                     del.MtdEliminarMaquila();
                     if (del.Exito)
                     {
-                        for (int i = 0; i < sel.Datos.Rows.Count; i++)
+                        CLS_Maquila del2 = new CLS_Maquila();
+                        del2.d_fecha_inicio_maq = dtFechaInicio.DateTime.Year.ToString() + DosCeros(dtFechaInicio.DateTime.Month.ToString()) + DosCeros(dtFechaInicio.DateTime.Day.ToString());
+                        del2.d_fecha_fin_maq = dtFechaFin.DateTime.Year.ToString() + DosCeros(dtFechaFin.DateTime.Month.ToString()) + DosCeros(dtFechaFin.DateTime.Day.ToString());
+                        del2.n_semana_maq = Convert.ToInt32(txtSemana.EditValue);
+                        del2.MtdEliminarMaquilaDetalles();
+                        if (del2.Exito)
                         {
-                            if (vManifiesto != sel.Datos.Rows[i]["c_codigo_man"].ToString())
+                            for (int i = 0; i < sel.Datos.Rows.Count; i++)
                             {
-                                vNTermo++;
-                                vManifiesto = sel.Datos.Rows[i]["c_codigo_man"].ToString();
-                                TomarPrecio(vNTermo);
-                            }
-                            string cManifiesto = sel.Datos.Rows[i]["c_codigo_man"].ToString().Trim();
-                            string cDistribuidor = sel.Datos.Rows[i]["v_nombre_dis"].ToString().Trim();
-                            string cFechaEmbarque = sel.Datos.Rows[i]["d_embarque_man"].ToString();
-                            string cProducto = sel.Datos.Rows[i]["v_nombre_pro"].ToString().Trim();
-                            string cEnvase = sel.Datos.Rows[i]["v_nombre_env"].ToString().Trim();
-                            decimal cPesoEstandar = Convert.ToDecimal(sel.Datos.Rows[i]["PesoEstandar"].ToString());
-                            decimal cPrecioNal = Convert.ToDecimal(sel.Datos.Rows[i]["PrecioNal"].ToString());
-                            int cCajas = Convert.ToInt32(Convert.ToDecimal(sel.Datos.Rows[i]["TCajas"].ToString()));
-                            decimal cMontoMaquila = 0;
-                            if (cProducto.IndexOf("PICADA") == -1 && cProducto.IndexOf("DESECHO") == -1)
-                            {
-                                if (cPrecioNal == 0)
+                                if (vManifiesto != sel.Datos.Rows[i]["c_codigo_man"].ToString())
                                 {
-                                    cMontoMaquila = Convert.ToDecimal(vPrecioMaquila * Convert.ToDecimal(cPesoEstandar));
+                                    vNTermo++;
+                                    vManifiesto = sel.Datos.Rows[i]["c_codigo_man"].ToString();
+                                    TomarPrecio(vNTermo);
+                                }
+                                string cManifiesto = sel.Datos.Rows[i]["c_codigo_man"].ToString().Trim();
+                                string cDistribuidor = sel.Datos.Rows[i]["v_nombre_dis"].ToString().Trim();
+                                string cFechaEmbarque = sel.Datos.Rows[i]["d_embarque_man"].ToString();
+                                string cProducto = sel.Datos.Rows[i]["v_nombre_pro"].ToString().Trim();
+                                string cEnvase = sel.Datos.Rows[i]["v_nombre_env"].ToString().Trim();
+                                decimal cPesoEstandar = Convert.ToDecimal(sel.Datos.Rows[i]["PesoEstandar"].ToString());
+                                decimal cPrecioNal = Convert.ToDecimal(sel.Datos.Rows[i]["PrecioNal"].ToString());
+                                int cCajas = Convert.ToInt32(Convert.ToDecimal(sel.Datos.Rows[i]["TCajas"].ToString()));
+                                decimal cMontoMaquila = 0;
+                                if (cProducto.IndexOf("PICADA") == -1 && cProducto.IndexOf("DESECHO") == -1)
+                                {
+                                    if (cPrecioNal == 0)
+                                    {
+                                        cMontoMaquila = Convert.ToDecimal(vPrecioMaquila * Convert.ToDecimal(cPesoEstandar));
+                                    }
+                                    else
+                                    {
+                                        cMontoMaquila = Convert.ToDecimal(cPrecioNal * Convert.ToDecimal(cPesoEstandar));
+                                    }
                                 }
                                 else
                                 {
-                                    cMontoMaquila = Convert.ToDecimal(cPrecioNal * Convert.ToDecimal(cPesoEstandar));
+                                    cMontoMaquila = 0;
                                 }
-                            }
-                            else
-                            {
-                                cMontoMaquila = 0;
-                            }
 
-                            decimal cMallas = Convert.ToDecimal(sel.Datos.Rows[i]["TMalla"].ToString());
-                            decimal cAPEAM = Convert.ToDecimal(sel.Datos.Rows[i]["TAPEAM"].ToString());
-                            decimal cSubTotal = Convert.ToDecimal(Convert.ToDecimal(cMontoMaquila) + Convert.ToDecimal(cMallas) + Convert.ToDecimal(cAPEAM));
-                            decimal cCharola = Convert.ToDecimal(sel.Datos.Rows[i]["TCharola"].ToString());
-                            cTOTAL = Convert.ToDecimal(Convert.ToDecimal(cSubTotal) + Convert.ToDecimal(cCharola));
-                            sTotal += cTOTAL;
-                            CreatNewRowArticulo(cManifiesto, cDistribuidor, cFechaEmbarque, cProducto, cEnvase, cPesoEstandar, cCajas, cMontoMaquila, cMallas, cAPEAM, cSubTotal, cCharola, cTOTAL);
+                                decimal cMallas = Convert.ToDecimal(sel.Datos.Rows[i]["TMalla"].ToString());
+                                decimal cAPEAM = Convert.ToDecimal(sel.Datos.Rows[i]["TAPEAM"].ToString());
+                                decimal cSubTotal = Convert.ToDecimal(Convert.ToDecimal(cMontoMaquila) + Convert.ToDecimal(cMallas) + Convert.ToDecimal(cAPEAM));
+                                decimal cCharola = Convert.ToDecimal(sel.Datos.Rows[i]["TCharola"].ToString());
+                                cTOTAL = Convert.ToDecimal(Convert.ToDecimal(cSubTotal) + Convert.ToDecimal(cCharola));
+                                sTotal += cTOTAL;
+                                CreatNewRowArticulo(cManifiesto, cDistribuidor, cFechaEmbarque, cProducto, cEnvase, cPesoEstandar, cCajas, cMontoMaquila, cMallas, cAPEAM, cSubTotal, cCharola, cTOTAL);
+                                
+                            }
+                            dtgValMaquila.OptionsView.ColumnAutoWidth = true;
+                            dtgValMaquila.BestFitColumns();
+                            txt_TotalRem.EditValue = 0;
+                            CargarReempaques();
+                            CargarExtra();
                         }
-                        dtgValMaquila.OptionsView.ColumnAutoWidth = true;
-                        dtgValMaquila.BestFitColumns();
-                        txt_TotalRem.EditValue = 0;
-                        CargarReempaques();
-                        CargarExtra();
+                        else
+                        {
+                            XtraMessageBox.Show(del2.Mensaje);
+                        }
                     }
                     else
                     {
@@ -952,7 +990,7 @@ namespace Maquila
                 }
                 else
                 {
-                    XtraMessageBox.Show(sel.Mensaje);
+                    XtraMessageBox.Show(sel.Mensaje+ " o no existen datos para mostrar");
                 }
             }
             else
@@ -1707,6 +1745,11 @@ namespace Maquila
             {
                 XtraMessageBox.Show(ex.Message);
             }
+        }
+
+        private void dtgValMaquila_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
+        {
+            dtgValMaquila.UpdateSummary();
         }
     }
 }

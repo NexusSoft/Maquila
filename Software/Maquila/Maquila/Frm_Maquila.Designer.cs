@@ -163,7 +163,10 @@
             this.gridColumn54 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn55 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn57 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn58 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panelControl9 = new DevExpress.XtraEditors.PanelControl();
+            this.d_FechaCausa = new DevExpress.XtraEditors.DateEdit();
+            this.labelControl27 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
             this.txt_Total = new DevExpress.XtraEditors.TextEdit();
@@ -199,9 +202,6 @@
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.barLargeButtonItem1 = new DevExpress.XtraBars.BarLargeButtonItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.d_FechaCausa = new DevExpress.XtraEditors.DateEdit();
-            this.labelControl27 = new DevExpress.XtraEditors.LabelControl();
-            this.gridColumn58 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl3)).BeginInit();
@@ -261,6 +261,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dtgValCausaExtra)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl9)).BeginInit();
             this.panelControl9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties.CalendarTimeProperties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Total.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Precio.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_cantidad.Properties)).BeginInit();
@@ -277,8 +279,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dtFechaInicio.Properties.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtFechaInicio.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pgBar.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties.CalendarTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -543,6 +543,7 @@
             this.dtgValMaquila.OptionsView.ShowFooter = true;
             this.dtgValMaquila.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
             new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.gridColumn13, DevExpress.Data.ColumnSortOrder.Ascending)});
+            this.dtgValMaquila.CellValueChanged += new DevExpress.XtraGrid.Views.Base.CellValueChangedEventHandler(this.dtgValMaquila_CellValueChanged);
             // 
             // gridColumn13
             // 
@@ -1660,6 +1661,14 @@
             this.gridColumn57.Visible = true;
             this.gridColumn57.VisibleIndex = 6;
             // 
+            // gridColumn58
+            // 
+            this.gridColumn58.Caption = "Fecha";
+            this.gridColumn58.FieldName = "d_fecha_causa";
+            this.gridColumn58.Name = "gridColumn58";
+            this.gridColumn58.Visible = true;
+            this.gridColumn58.VisibleIndex = 2;
+            // 
             // panelControl9
             // 
             this.panelControl9.Controls.Add(this.d_FechaCausa);
@@ -1683,6 +1692,27 @@
             this.panelControl9.Name = "panelControl9";
             this.panelControl9.Size = new System.Drawing.Size(977, 193);
             this.panelControl9.TabIndex = 0;
+            // 
+            // d_FechaCausa
+            // 
+            this.d_FechaCausa.EditValue = null;
+            this.d_FechaCausa.Location = new System.Drawing.Point(82, 85);
+            this.d_FechaCausa.MenuManager = this.barManager1;
+            this.d_FechaCausa.Name = "d_FechaCausa";
+            this.d_FechaCausa.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.d_FechaCausa.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.d_FechaCausa.Size = new System.Drawing.Size(100, 20);
+            this.d_FechaCausa.TabIndex = 38;
+            // 
+            // labelControl27
+            // 
+            this.labelControl27.Location = new System.Drawing.Point(25, 89);
+            this.labelControl27.Name = "labelControl27";
+            this.labelControl27.Size = new System.Drawing.Size(36, 13);
+            this.labelControl27.TabIndex = 37;
+            this.labelControl27.Text = "Fecha :";
             // 
             // labelControl26
             // 
@@ -2058,35 +2088,6 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // d_FechaCausa
-            // 
-            this.d_FechaCausa.EditValue = null;
-            this.d_FechaCausa.Location = new System.Drawing.Point(82, 85);
-            this.d_FechaCausa.MenuManager = this.barManager1;
-            this.d_FechaCausa.Name = "d_FechaCausa";
-            this.d_FechaCausa.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.d_FechaCausa.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.d_FechaCausa.Size = new System.Drawing.Size(100, 20);
-            this.d_FechaCausa.TabIndex = 38;
-            // 
-            // labelControl27
-            // 
-            this.labelControl27.Location = new System.Drawing.Point(25, 89);
-            this.labelControl27.Name = "labelControl27";
-            this.labelControl27.Size = new System.Drawing.Size(36, 13);
-            this.labelControl27.TabIndex = 37;
-            this.labelControl27.Text = "Fecha :";
-            // 
-            // gridColumn58
-            // 
-            this.gridColumn58.Caption = "Fecha";
-            this.gridColumn58.FieldName = "d_fecha_causa";
-            this.gridColumn58.Name = "gridColumn58";
-            this.gridColumn58.Visible = true;
-            this.gridColumn58.VisibleIndex = 2;
-            // 
             // Frm_Maquila
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2165,6 +2166,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.panelControl9)).EndInit();
             this.panelControl9.ResumeLayout(false);
             this.panelControl9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties.CalendarTimeProperties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Total.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_Precio.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_cantidad.Properties)).EndInit();
@@ -2182,8 +2185,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dtFechaInicio.Properties.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtFechaInicio.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pgBar.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties.CalendarTimeProperties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.d_FechaCausa.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
